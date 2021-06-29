@@ -1,4 +1,5 @@
-from django.views.generic import TemplateView, DetailView
+from django.shortcuts import redirect
+from django.views.generic import TemplateView, DetailView, CreateView
 
 from blog.models import Post
 
@@ -16,3 +17,16 @@ class Home(TemplateView):
 class PostDetails(DetailView):
     template_name = 'post_details.html'
     model = Post
+
+
+class CreatePostView(CreateView):
+    template_name = 'create_post.html'
+    model = Post
+    fields = ('title', 'post_text', 'tags')
+
+    def form_valid(self, form):
+        post = form.save(commit=False)
+        post.author = self.request.user
+        post.save()
+        return redirect('/')
+
