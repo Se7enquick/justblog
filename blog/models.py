@@ -18,3 +18,10 @@ class Tag(models.Model):
 
     def __str__(self):
         return self.name
+
+
+class Comment(models.Model):
+    post = models.ForeignKey(Post, on_delete=models.CASCADE, verbose_name='comments', null=True, blank=True)
+    user = models.ForeignKey(User, verbose_name='author', on_delete=models.CASCADE)
+    text = models.TextField(verbose_name='comment text')
+    created = models.DateTimeField(auto_now_add=True)

@@ -23,7 +23,9 @@
             <form method="post" class="form">
                 {% csrf_token %}
                 {% bootstrap_form form %}
-                    <a type="submit" href="/accounts/login" class="btn btn-primary">Зарегистрироваться</a>
+                {% buttons %}
+                    <button type="submit" class="btn btn-primary">Опубликовать</button>
+                {% endbuttons %}
             </form>
         </div>
     </body>
