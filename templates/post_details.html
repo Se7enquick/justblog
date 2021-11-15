@@ -1,3 +1,5 @@
+{% load crispy_forms_tags %}
+{% load bootstrap4 %}
 <html>
 <head>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
@@ -19,13 +21,54 @@
           </div>
         </nav>
         <div class="container">
+        <a href="/">Назад ко всем постам</a>
             <h1>{{ post.title }}</h1>
             <span>{{ post.created }}</span><br>
             {% for tag in post.tags.all %}
                 <a href="/tag/{{ tag.id }}">#{{ tag.name }}</a><br>
             {% endfor %}
-            <i><b>{{ post.author.username }}</b></i>
+            <i><b>Кто разместил:{{ post.author.username }}</b></i>
             <h6>{{ post.post_text }}</h6>
+            <hr>
+            <h5>Комментарии:</h5>
         </div>
+            <div class="row">
+                <div class="col-md-3"></div>
+                <div class="col-md-8">
+                    {% for comment in comments %}
+                        <b>{{ comment.user }}</b><br>
+                        {{ comment.created }}<br>
+                        <h4>{{ comment.text }}</h4>
+                    {% empty %}
+                        <h5>Комментариев еще нет</h5>
+                    {% endfor %}
+
+                        <div class="pagination">
+                            <span class="step-links">
+                                {% if comments.has_previous %}
+                                <a href="?page=1"class='btn btn-outline-primary'>&laquo; первая страница</a>
+                                <a href="?page={{ comments.previous_page_number }}"class='btn btn-outline-primary'>Предыдущая страница</a>
+                                {% endif %}
+
+                            <span class="current">
+                                <b>Страница {{ comments.number }} из {{ comments.paginator.num_pages }} </b>.
+                            </span>
+
+                                {% if comments.has_next %}
+                                    <a href="?page={{ comments.next_page_number }}"class='btn btn-outline-primary'>следующая страница</a>
+                                    <a href="?page={{ comments.paginator.num_pages }}"class='btn btn-outline-primary'>последняя страница &raquo;</a><hr>
+                                {% endif %}
+                            </span>
+                        </div>
+                    <div class="col-md-2"></div>
+                </div>
+                <div class="row">
+                <div class="col-md-3"></div>
+                <div class="col-md-6">
+                    <a href="{% url 'comment' post.pk %}" class="btn btn-primary">Оставить комментарий</a>
+                </div>
+                <div class="col-md-3"></div>
+            </div>
+            </div>
     </body>
 </html>
